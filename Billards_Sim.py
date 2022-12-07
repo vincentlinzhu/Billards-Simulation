@@ -20,7 +20,7 @@ def main():
     uB = 0.11
     vB = 0.2
     t = 0
-    tfinal = 100
+    tfinal = 50
     dt = 0.02
     
     while t < tfinal:
@@ -33,7 +33,7 @@ def main():
         board.add_patch(blueBall)
         
         plt.draw()
-        plt.pause(0.003)
+        plt.pause(0.01)
         redBall.remove()
         blueBall.remove()
         
@@ -100,11 +100,11 @@ def wallCollisionCase(r, x, y, u, v):
     return x, y, u, v
         
 def objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dt):
-    # Update the position
-    xR = xR + (dt)*(uR)
-    yR = yR + (dt)*(vR)
-    xB = xB + (dt)*(uB)
-    yB = yB + (dt)*(vB)
+    # # Update the position
+    # xR = xR + (dt)*(uR)
+    # yR = yR + (dt)*(vR)
+    # xB = xB + (dt)*(uB)
+    # yB = yB + (dt)*(vB)
     
     # Detect a Collision
     length = np.sqrt((xR - xB)**2 + (yR - yB)**2)
