@@ -3,14 +3,11 @@ from matplotlib import pyplot as plt, patches
 from matplotlib.animation import FuncAnimation 
 
 def main():
-    # initializing a figure in 
-    # which the graph will be plotted
-    fig = plt.figure() 
-
-    # marking the x-axis and y-axis
-    board = plt.axes(xlim =(0, 1), ylim =(0, 1)) 
-
+    # Initial Conditions
     r = 0.05
+    
+    # Test Case 1:
+    print("Test Case 1: ")
     xR = 0.75
     yR = 5*r
     uR = -0.1
@@ -19,6 +16,40 @@ def main():
     yB = 5.5*r
     uB = 0.11
     vB = 0.2
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+    
+    # Test Case 2:
+    print("Test Case 2: ")
+    xR = 0.75
+    yR = 0.5
+    uR = -0.5
+    vR = 0
+    xB = 0.25
+    yB = 0.5
+    uB = 0.5
+    vB = 0
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+    
+    # Test Case 3:
+    print("Test Case 3: ")
+    xR = 0.5
+    yR = 0.5
+    uR = 0.5
+    vR = 0.5
+    xB = 0.05
+    yB = 0.05
+    uB = 0
+    vB = 0
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+
+def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
+     # initializing a figure in 
+    # which the graph will be plotted
+    fig = plt.figure() 
+
+    # marking the x-axis and y-axis
+    board = plt.axes(xlim =(0, 1), ylim =(0, 1)) 
+    
     t = 0
     tfinal = 50
     dt = 0.02
@@ -33,7 +64,7 @@ def main():
         board.add_patch(blueBall)
         
         plt.draw()
-        plt.pause(0.003)
+        plt.pause(0.005)
         redBall.remove()
         blueBall.remove()
         
@@ -46,7 +77,7 @@ def main():
         yB = yB + (dt)*(vB)
         
         dtnew = dt # If there is no collision of any kind, then the next iteration will just continue with the original dt.
-        dtnewList = []
+        dtnewList = [] # List of all the possible dtnews. Must determine the minimum dtnew to see which event will happen first
         RdtnewRW = dt
         RdtnewLW = dt
         RdtnewTW = dt
@@ -109,11 +140,10 @@ def main():
             dtnewCollide = (relative_distance - (2*r))/relative_velocity
             dtnewList.append(dtnewCollide)
         
-        if (len(dtnewList) != 0) :    
-            dtnew = dtnewList[0]
-            for i in range(len(dtnewList) - 1):
-                dtnew = min(dtnewList[i], dtnew)
+        if (len(dtnewList) != 0) :  
+            dtnew = min(dtnewList[0 : len(dtnewList)])  
             
+            # Red Ball Wall Collisions:
             x = xR
             y = yR
             u = uR
@@ -127,6 +157,7 @@ def main():
             if (dtnew == RdtnewBW) :
                 xR, yR, uR, vR = bottomWallCollision(r, x, y, u, v, dtnew)
             
+            # Blue Ball Wall Collisions:            
             x = xB
             y = yB
             u = uB
@@ -140,12 +171,14 @@ def main():
             if (dtnew == BdtnewBW) :
                 xB, yB, uB, vB = bottomWallCollision(r, x, y, u, v, dtnew)
             
+            # Red and Blue Ball Collision Case:
             if (dtnew == dtnewCollide) :
                 xR, yR, uR, vR, xB, yB, uB, vB = objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dtnew, length)
     
         t = t + dtnew
         
-    plt.show()
+    plt.show(block=False)
+    plt.close('all')
         
 def rightWallCollision(r, x, y, u, v, dtnew):
     alpha = 0.8
@@ -154,6 +187,7 @@ def rightWallCollision(r, x, y, u, v, dtnew):
     y = y + (dtnew)*(v)
     u = -alpha * u
     v = beta * v
+    print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
 def leftWallCollision(r, x, y, u, v, dtnew):
@@ -163,6 +197,7 @@ def leftWallCollision(r, x, y, u, v, dtnew):
     y = y + (dtnew)*(v)
     u = -alpha * u
     v = beta * v
+    print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
 def topWallCollision(r, x, y, u, v, dtnew):
@@ -172,6 +207,7 @@ def topWallCollision(r, x, y, u, v, dtnew):
     y = 1 - r
     u = alpha * u
     v = -beta * v
+    print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
 def bottomWallCollision(r, x, y, u, v, dtnew):
@@ -181,6 +217,7 @@ def bottomWallCollision(r, x, y, u, v, dtnew):
     y = r
     u = alpha * u
     v = -beta * v
+    print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
         
 def objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dtnew, length): 
@@ -208,6 +245,7 @@ def objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dtnew, length):
     uB = VB_out[0]
     vB = VB_out[1]
                 
+    print ("xR: ", xR, "yR: ", yR, "uR", uR, "vR", vR, "xB: ", xB, "yB: ", yB, "uB", uB, "vB", vB)
     return xR, yR, uR, vR, xB, yB, uB, vB
 
 if __name__ == "__main__":

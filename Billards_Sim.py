@@ -138,6 +138,28 @@ def objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dt):
         vB = VB_out[1]
                 
     return xR, yR, uR, vR, xB, yB, uB, vB
+
+# # RIGHT Wall
+# if ((x + r) > 1):
+#     BdtnewRW = (1 - r - x)/u
+#     dtnewList.append(BdtnewRW)
+# # LEFT Wall
+# if ((x - r) < 0):
+#     BdtnewLW = (x - r)/u
+#     dtnewList.append(BdtnewLW)
+# # TOP Wall
+# if ((y + r) > 1):
+#     BdtnewTW = (1 - r - y)/v
+#     dtnewList.append(BdtnewTW)
+# # BOTTOM Wall
+# if ((y - r) < 0):
+#     BdtnewBW = (y - r)/v
+#     dtnewList.append(BdtnewBW)
+        
+# if (len(dtnewList) != 0) :  
+#     dtnew = dtnewList[0]
+#     for i in range(len(dtnewList) - 1):
+#         dtnew = min(dtnewList[i], dtnew)
         
 # # Red Ball Wall Motion
 # # If the red ball hits the RIGHT wall
