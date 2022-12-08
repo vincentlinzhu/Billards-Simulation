@@ -8,38 +8,20 @@ def main():
     
     # Test Case 1:
     print("Test Case 1: ")
-    xR = 0.75
-    yR = 5*r
-    uR = -0.1
-    vR = 0.5
-    xB = 0.25
-    yB = 5.5*r
-    uB = 0.11
-    vB = 0.2
+    xR, yR, uR, vR = 0.75, 5*r, -0.1, 0.5  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.25, 5.5*r, 0.11, 0.2  # Blue Ball Initial Values
     run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
     
     # Test Case 2:
     print("Test Case 2: ")
-    xR = 0.75
-    yR = 0.5
-    uR = -0.5
-    vR = 0
-    xB = 0.25
-    yB = 0.5
-    uB = 0.5
-    vB = 0
+    xR, yR, uR, vR = 0.75, 0.5, -0.5, 0  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.25, 0.5, 0.5, 0  # Blue Ball Initial Values
     run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
     
     # Test Case 3:
     print("Test Case 3: ")
-    xR = 0.5
-    yR = 0.5
-    uR = 0.5
-    vR = 0.5
-    xB = 0.05
-    yB = 0.05
-    uB = 0
-    vB = 0
+    xR, yR, uR, vR = 0.5, 0.5, 0.5, 0.5  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.05, 0.05, 0, 0  # Blue Ball Initial Values
     run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
 
 def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
@@ -149,12 +131,16 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
             u = uR
             v = vR
             if (dtnew == RdtnewRW) :
+                print("Red Ball:")
                 xR, yR, uR, vR = rightWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == RdtnewLW) :
+                print("Red Ball:")
                 xR, yR, uR, vR = leftWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == RdtnewTW) :
+                print("Red Ball:")
                 xR, yR, uR, vR = topWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == RdtnewBW) :
+                print("Red Ball:")
                 xR, yR, uR, vR = bottomWallCollision(r, x, y, u, v, dtnew)
             
             # Blue Ball Wall Collisions:            
@@ -163,16 +149,21 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
             u = uB
             v = vB
             if (dtnew == BdtnewRW) :
+                print("Blue Ball:")
                 xB, yB, uB, vB = rightWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == BdtnewLW) :
+                print("Blue Ball:")
                 xB, yB, uB, vB = leftWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == BdtnewTW) :
+                print("Blue Ball:")
                 xB, yB, uB, vB = topWallCollision(r, x, y, u, v, dtnew)
             if (dtnew == BdtnewBW) :
+                print("Blue Ball:")
                 xB, yB, uB, vB = bottomWallCollision(r, x, y, u, v, dtnew)
             
             # Red and Blue Ball Collision Case:
             if (dtnew == dtnewCollide) :
+                print("BOTH Balls:")
                 xR, yR, uR, vR, xB, yB, uB, vB = objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dtnew, length)
     
         t = t + dtnew
