@@ -2,39 +2,60 @@ import numpy as np
 from matplotlib import pyplot as plt, patches
 from matplotlib.animation import FuncAnimation 
 
-def main():
+def main(): 
+    # The main function will run each simulation case one after another back to back 
+    # automatically. To run all 5 cases, just use ”python3 billard.py”.
+    
     # Initial Conditions
     r = 0.05
     
-    # Test Case 1:
+    # Test Case 1 (This is the case given in the problem statement):
     print("Test Case 1: ")
     xR, yR, uR, vR = 0.75, 5*r, -0.1, 0.5  # Red Ball Initial Values
     xB, yB, uB, vB = 0.25, 5.5*r, 0.11, 0.2  # Blue Ball Initial Values
-    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+    alpha, beta = 0.8, 0.98
+    t, tfinal, dt = 0, 50, 0.02
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
     
-    # Test Case 2:
+    # Test Case 2 (Tests all the walls):
     print("Test Case 2: ")
-    xR, yR, uR, vR = 0.75, 0.5, -0.5, 0  # Red Ball Initial Values
-    xB, yB, uB, vB = 0.25, 0.5, 0.5, 0  # Blue Ball Initial Values
-    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+    xR, yR, uR, vR = 0.05, 0.5, 0.5, 0.5  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.95, 0.5, -0.5, -0.5  # Blue Ball Initial Values
+    alpha, beta = 0.8, 0.8 # Made the vertical and the horizontal friction constants the same for testing purposes
+    t, tfinal, dt = 0, 50, 0.02
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
     
-    # Test Case 3:
+    # Test Case 3 (This case tests whether the colission is elastic horizontally):
     print("Test Case 3: ")
-    xR, yR, uR, vR = 0.5, 0.5, 0.5, 0.5  # Red Ball Initial Values
-    xB, yB, uB, vB = 0.05, 0.05, 0, 0  # Blue Ball Initial Values
-    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB)
+    xR, yR, uR, vR = 0.75, 0.5, 0, 0  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.25, 0.5, 0.5, 0  # Blue Ball Initial Values
+    alpha, beta = 0.8, 0.8 # Made the vertical and the horizontal friction constants the same for testing purposes
+    t, tfinal, dt = 0, 10, 0.02
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
+    
+    # Test Case 4 (This case tests whether the colission is elastic vertically):
+    print("Test Case 4: ")
+    xR, yR, uR, vR = 0.5, 0.75, 0, 0  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.5, 0.25, 0, 0.5  # Blue Ball Initial Values
+    alpha, beta = 0.8, 0.8 # Made the vertical and the horizontal friction constants the same for testing purposes
+    t, tfinal, dt = 0, 10, 0.02
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
+    
+    # Test Case 5 (Tests angled collisions):
+    print("Test Case 5: ")
+    xR, yR, uR, vR = 0.05, 0.5, 0.5, 0  # Red Ball Initial Values
+    xB, yB, uB, vB = 0.5, 0.05, 0, 0.5  # Blue Ball Initial Values
+    alpha, beta = 0.8, 0.8 # Made the vertical and the horizontal friction constants the same for testing purposes
+    t, tfinal, dt = 0, 30, 0.02
+    run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
 
-def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
+def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt):
      # initializing a figure in 
     # which the graph will be plotted
     fig = plt.figure() 
 
     # marking the x-axis and y-axis
     board = plt.axes(xlim =(0, 1), ylim =(0, 1)) 
-    
-    t = 0
-    tfinal = 50
-    dt = 0.02
     
     while t < tfinal:
         # draw the red and blue balls on the board
@@ -46,12 +67,12 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
         board.add_patch(blueBall)
         
         plt.draw()
-        plt.pause(0.005)
+        plt.pause(0.005) # Controls the speed of the animation (If the value is smaller, the animation will be faster)
         redBall.remove()
         blueBall.remove()
         
         if (t + dt > tfinal):
-            dt = tfinal - 1 
+            dt = tfinal - t 
         
         xR = xR + (dt)*(uR)
         yR = yR + (dt)*(vR)
@@ -75,19 +96,19 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
         y = yR
         u = uR
         v = vR
-        # RIGHT Wall
+        # detect a RIGHT Wall
         if ((x + r) > 1):
             RdtnewRW = (1 - r - x)/u
             dtnewList.append(RdtnewRW)
-        # LEFT Wall
+        # detect a LEFT Wall
         if ((x - r) < 0):
             RdtnewLW = (x - r)/u
             dtnewList.append(RdtnewLW)
-        # TOP Wall
+        # detect a TOP Wall
         if ((y + r) > 1):
             RdtnewTW = (1 - r - y)/v
             dtnewList.append(RdtnewTW)
-        # BOTTOM Wall
+        # detect a BOTTOM Wall
         if ((y - r) < 0):
             RdtnewBW = (y - r)/v
             dtnewList.append(RdtnewBW)
@@ -97,19 +118,19 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
         y = yB
         u = uB
         v = vB
-        # RIGHT Wall
+        # detect a RIGHT Wall
         if ((x + r) > 1):
             BdtnewRW = (1 - r - x)/u
             dtnewList.append(BdtnewRW)
-        # LEFT Wall
+        # detect a LEFT Wall
         if ((x - r) < 0):
             BdtnewLW = (x - r)/u
             dtnewList.append(BdtnewLW)
-        # TOP Wall
+        # detect a TOP Wall
         if ((y + r) > 1):
             BdtnewTW = (1 - r - y)/v
             dtnewList.append(BdtnewTW)
-        # BOTTOM Wall
+        # detect a BOTTOM Wall
         if ((y - r) < 0):
             BdtnewBW = (y - r)/v
             dtnewList.append(BdtnewBW)
@@ -132,16 +153,16 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
             v = vR
             if (dtnew == RdtnewRW) :
                 print("Red Ball:")
-                xR, yR, uR, vR = rightWallCollision(r, x, y, u, v, dtnew)
+                xR, yR, uR, vR = rightWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == RdtnewLW) :
                 print("Red Ball:")
-                xR, yR, uR, vR = leftWallCollision(r, x, y, u, v, dtnew)
+                xR, yR, uR, vR = leftWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == RdtnewTW) :
                 print("Red Ball:")
-                xR, yR, uR, vR = topWallCollision(r, x, y, u, v, dtnew)
+                xR, yR, uR, vR = topWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == RdtnewBW) :
                 print("Red Ball:")
-                xR, yR, uR, vR = bottomWallCollision(r, x, y, u, v, dtnew)
+                xR, yR, uR, vR = bottomWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             
             # Blue Ball Wall Collisions:            
             x = xB
@@ -150,16 +171,16 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
             v = vB
             if (dtnew == BdtnewRW) :
                 print("Blue Ball:")
-                xB, yB, uB, vB = rightWallCollision(r, x, y, u, v, dtnew)
+                xB, yB, uB, vB = rightWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == BdtnewLW) :
                 print("Blue Ball:")
-                xB, yB, uB, vB = leftWallCollision(r, x, y, u, v, dtnew)
+                xB, yB, uB, vB = leftWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == BdtnewTW) :
                 print("Blue Ball:")
-                xB, yB, uB, vB = topWallCollision(r, x, y, u, v, dtnew)
+                xB, yB, uB, vB = topWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             if (dtnew == BdtnewBW) :
                 print("Blue Ball:")
-                xB, yB, uB, vB = bottomWallCollision(r, x, y, u, v, dtnew)
+                xB, yB, uB, vB = bottomWallCollision(r, x, y, u, v, alpha, beta, dtnew)
             
             # Red and Blue Ball Collision Case:
             if (dtnew == dtnewCollide) :
@@ -171,9 +192,7 @@ def run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB):
     plt.show(block=False)
     plt.close('all')
         
-def rightWallCollision(r, x, y, u, v, dtnew):
-    alpha = 0.8
-    beta = 0.98
+def rightWallCollision(r, x, y, u, v, alpha, beta, dtnew):
     x = 1 - r
     y = y + (dtnew)*(v)
     u = -alpha * u
@@ -181,9 +200,7 @@ def rightWallCollision(r, x, y, u, v, dtnew):
     print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
-def leftWallCollision(r, x, y, u, v, dtnew):
-    alpha = 0.8
-    beta = 0.98
+def leftWallCollision(r, x, y, u, v, alpha, beta, dtnew):
     x = r
     y = y + (dtnew)*(v)
     u = -alpha * u
@@ -191,9 +208,7 @@ def leftWallCollision(r, x, y, u, v, dtnew):
     print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
-def topWallCollision(r, x, y, u, v, dtnew):
-    alpha = 0.8
-    beta = 0.98
+def topWallCollision(r, x, y, u, v, alpha, beta, dtnew):
     x = x + (dtnew)*(u)
     y = 1 - r
     u = alpha * u
@@ -201,9 +216,7 @@ def topWallCollision(r, x, y, u, v, dtnew):
     print ("x: ", x, "y: ", y, "u", u, "v", v)
     return x, y, u, v
 
-def bottomWallCollision(r, x, y, u, v, dtnew):
-    alpha = 0.8
-    beta = 0.98
+def bottomWallCollision(r, x, y, u, v, alpha, beta, dtnew):
     x = x + (dtnew)*(u)
     y = r
     u = alpha * u

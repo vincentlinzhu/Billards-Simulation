@@ -139,6 +139,14 @@ def objectsCollisionCase(r, xR, yR, uR, vR, xB, yB, uB, vB, dt):
                 
     return xR, yR, uR, vR, xB, yB, uB, vB
 
+# # Test Case 6 (Corner Case): 
+    # print("Test Case 6: ")
+    # xR, yR, uR, vR = 0.5, 0.5, 0.5, 0.5  # Red Ball Initial Values
+    # xB, yB, uB, vB = 0.95, 0.05, 0, 0  # Blue Ball Initial Values
+    # alpha, beta = 0.8, 0.8
+    # t, tfinal, dt = 0, 20, 0.02
+    # run_simulation_test(r, xR, yR, uR, vR, xB, yB, uB, vB, alpha, beta, t, tfinal, dt)
+
 # # RIGHT Wall
 # if ((x + r) > 1):
 #     BdtnewRW = (1 - r - x)/u
